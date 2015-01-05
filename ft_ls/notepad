@@ -1,0 +1,32 @@
+-l
+info sup
+stat + structure
+-R
+recursivite
+old/ft_list...
+-a
+hidden files
+conditions au display filename[0] == '.'
+-r
+reverse sort order
+-t
+sort by time modified instead o lexicographicaly
+
+structure :
+file name
+file path
+file type					\stats
+file last modification time	/
+next file link
+
+sorting :
+1 - lexicographicaly 
+2 - reverse lexico
+3 - time mode
+4 - reverse time mode
+
+recursivite:
+capter tout les fichier->structure
+trier structure
+afficher structure
+refaire recursivite pour chaque repertoire de structure
