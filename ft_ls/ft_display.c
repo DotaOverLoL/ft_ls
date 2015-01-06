@@ -6,7 +6,7 @@
 /*   By: tlebrize <tlebrize@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/11 18:16:27 by tlebrize          #+#    #+#             */
-/*   Updated: 2014/12/17 18:30:12 by tlebrize         ###   ########.fr       */
+/*   Updated: 2015/01/06 19:42:44 by tlebrize         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,27 +74,33 @@ void	ft_too_long(t_list *list, t_width w)
 	struct passwd	*own;
 	struct group	*grp;
 	int				ospc;
-	int				gbspc;
+	int				gspc;
+	int				bspc;
 
 	own = getpwuid((list->stats).st_uid);
 	grp = getgrgid((list->stats).st_gid);
 	ospc = 2 + (w.owner - ft_strlen(own->pw_name));
-	gbspc = 2 + (w.group - ft_strlen(grp->gr_name)) +
-		(w.bytes - ft_intlen((int)(list->stats).st_size));
+	gspc = 2 + (w.group - ft_strlen(grp->gr_name))
+	bspc = (w.bytes - ft_intlen((int)(list->stats).st_size));
 	ft_putstr(own->pw_name);
 	while (ospc-- != 0)
 		ft_putchar(' ');
 	ft_putstr(grp->gr_name);
-	while (gbspc-- != 0)
+	while (gspc-- != 0)
 		ft_putchar(' ');
-	ft_way_too_long(list);
+	while (bspc-- != 0)
+		ft_putchar(' ');
+	ft_way_too_long(list, w);
 }
 
-void	ft_way_too_long(t_list *list)
+void	ft_way_too_long(t_list *list, t_width w)
 {
 	char			link[NAME_MAX];
 
-	ft_putnbr((int)(list->stats).st_size);
+	if (S_ISBLK((list->stats).st_mode) || S_ISCHR((list->stats).st_mode))
+		ft_majmin((list->stats).st_rdev, w);
+	else
+		ft_putnbr((int)(list->stats).st_size);
 	ft_putchar(' ');
 	ft_puttime(&(list->stats).st_mtimespec.tv_sec);
 	ft_putstr(list->name);

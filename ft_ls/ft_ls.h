@@ -6,7 +6,7 @@
 /*   By: tlebrize <tlebrize@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/13 19:06:46 by tlebrize          #+#    #+#             */
-/*   Updated: 2014/12/17 20:01:14 by tlebrize         ###   ########.fr       */
+/*   Updated: 2015/01/06 19:03:30 by tlebrize         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct			s_width
 	int					owner;
 	int					group;
 	int					bytes;
+	int					major;
+	int					minor;
 }						t_width;
 
 t_args					ft_args(char **argv);
@@ -62,7 +64,7 @@ void					ft_swaplink(t_list *l1, t_list *l2);
 void					ft_printlist(t_list *list);
 void					ft_long(t_list *list, t_width w);
 void					ft_too_long(t_list *list, t_width w);
-void					ft_way_too_long(t_list *list);
+void					ft_way_too_long(t_list *list, t_width w);
 void					ft_total(t_list *list, t_args args);
 int						ft_intlen(int i);
 t_list					*ft_bubbles_time(t_list *list, int r);
@@ -73,4 +75,5 @@ void					ft_recursive(t_list *directories, t_args args);
 t_width					ft_get_width(t_list *list);
 void					ft_display(t_list *list, t_args args);
 void					ft_putpath(char *path);
+void					ft_majmin(dev_t, t_width w);
 #endif

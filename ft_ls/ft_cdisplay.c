@@ -6,7 +6,7 @@
 /*   By: tlebrize <tlebrize@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/13 16:53:20 by tlebrize          #+#    #+#             */
-/*   Updated: 2014/12/17 20:00:43 by tlebrize         ###   ########.fr       */
+/*   Updated: 2015/01/06 19:42:42 by tlebrize         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ t_width		ft_get_width(t_list *list)
 	w.owner = 0;
 	w.group = 0;
 	w.bytes = 0;
+	w.major = 0;
+	w.minor = 0;
 	while (list != NULL)
 	{
 		own = getpwuid((list->stats).st_uid);
@@ -35,6 +37,11 @@ t_width		ft_get_width(t_list *list)
 			w.group = ft_strlen(grp->gr_name);
 		if (ft_intlen((int)(list->stats).st_size) > w.bytes)
 			w.bytes = ft_intlen((int)(list->stats).st_size);
+		if (ft_intlen(major((list->stats).st_rdev)) > w.major)
+			w.major = ft_intlen(major((list->stats).st_rdev));
+		if (ft_intlen(minor((list->stats).st_rdev)) > w.minor)
+			w.minor = ft_intlen(minor((list->stats).st_rdev));
+		if ()
 		list = list->next;
 	}
 	return (w);
