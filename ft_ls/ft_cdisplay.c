@@ -6,7 +6,7 @@
 /*   By: tlebrize <tlebrize@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/13 16:53:20 by tlebrize          #+#    #+#             */
-/*   Updated: 2015/01/06 19:42:42 by tlebrize         ###   ########.fr       */
+/*   Updated: 2015/01/12 16:21:30 by tlebrize         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,13 @@ t_width		ft_get_width(t_list *list)
 			w.major = ft_intlen(major((list->stats).st_rdev));
 		if (ft_intlen(minor((list->stats).st_rdev)) > w.minor)
 			w.minor = ft_intlen(minor((list->stats).st_rdev));
-		if ()
+		if (S_ISBLK((list->stats).st_mode) || S_ISCHR((list->stats).st_mode))
+		{
+			if (w.major > w.minor)
+				w.bytes = 3 + (w.major * 2);
+			else
+				w.bytes = 3 + (w.minor * 2);
+		}
 		list = list->next;
 	}
 	return (w);
@@ -66,19 +72,25 @@ char		*ft_path(char *base, char *str)
 void	ft_total(t_list *list, t_args args)
 {
 	int		blocks;
+	int		empty;
 
 	blocks = 0;
+	empty = 0;
 	while (list != NULL)
 	{
-		if (list->name[0] == '.' && args.a == 0)
-			;
-		else
+		if (list->name[0] != '.' || args.a != 0)
+		{
 			blocks += (int)(list->stats).st_blocks;
+			empty++;
+		}
 		list = list->next;
 	}
-	ft_putstr("total ");
-	ft_putnbr((int)blocks);
-	ft_putchar('\n');
+	if (empty != 0)
+	{
+		ft_putstr("total ");
+		ft_putnbr(blocks);
+		ft_putchar('\n');
+	}
 }
 
 int		ft_intlen(int i)
@@ -93,6 +105,10 @@ int		ft_intlen(int i)
 
 void	ft_putpath(char *path)
 {
-	ft_putstr(path);
+	int		i;
+
+	i = 0;
+	while (path[i + 2] != '\0')
+		ft_putchar(path[i++]);
 	ft_putstr(":\n");
 }

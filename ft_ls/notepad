@@ -1,8 +1,6 @@
-major et minor
-	gerer les cas ou il y a des majmin puis des bytes a afficher
+bug sur les fichiers ;ultiples
 
-messages d'erreurs
+ft_ls -r nopa :
+nopa/fi
 
-makefile
-
-norme
+fait ton makefile

@@ -6,21 +6,23 @@
 /*   By: tlebrize <tlebrize@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/10 17:04:59 by tlebrize          #+#    #+#             */
-/*   Updated: 2014/12/17 12:14:54 by tlebrize         ###   ########.fr       */
+/*   Updated: 2015/01/12 17:17:28 by tlebrize         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-t_list		*ft_addlink(t_list *list, char *name, char *path, struct stat stats)
+t_list		*ft_addlink(t_list *list, char *name, char *path)
 {
-	t_list	*new;
+	t_list		*new;
+	struct stat	stats;
 
 	new = (t_list*)malloc(sizeof(t_list));
 	new->name = (char*)malloc(sizeof(char) * (ft_strlen(name) + 1));
 	new->path = (char*)malloc(sizeof(char) * (ft_strlen(path) + 1));
 	if (new && new->name && new->path)
 	{
+		stat(path, &stats);
 		ft_strcpy(new->name, name);
 		ft_strcpy(new->path, path);
 		new->stats = stats;

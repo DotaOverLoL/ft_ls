@@ -6,7 +6,7 @@
 /*   By: tlebrize <tlebrize@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/11 18:16:27 by tlebrize          #+#    #+#             */
-/*   Updated: 2015/01/06 19:42:44 by tlebrize         ###   ########.fr       */
+/*   Updated: 2015/01/08 17:58:56 by tlebrize         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,58 +56,51 @@ void	ft_puttime(time_t *clock)
 	ft_putchar(' ');
 }
 
-void	ft_long(t_list *list, t_width w)
+void	ft_putnlinks(nlink_t links, int width)
 {
-	int				lspc;
+	int links_spaces;
 
-	ft_putmodes(list->stats);
-	lspc = w.links - ft_intlen((int)(list->stats).st_nlink);
-	while (lspc-- != 0)
+	links_spaces = width - ft_intlen((int)links);
+	while (links_spaces-- != 0)
 		ft_putchar(' ');
-	ft_putnbr((int)(list->stats).st_nlink);
+	ft_putnbr((int)links);
 	ft_putchar(' ');
-	ft_too_long(list, w);
 }
 
-void	ft_too_long(t_list *list, t_width w)
+void	ft_putnames(uid_t uid, gid_t gid, t_width width)
 {
-	struct passwd	*own;
-	struct group	*grp;
-	int				ospc;
-	int				gspc;
-	int				bspc;
+	struct passwd	*owner;
+	struct group	*group;
+	int				owner_spaces;
+	int				group_spaces;
 
-	own = getpwuid((list->stats).st_uid);
-	grp = getgrgid((list->stats).st_gid);
-	ospc = 2 + (w.owner - ft_strlen(own->pw_name));
-	gspc = 2 + (w.group - ft_strlen(grp->gr_name))
-	bspc = (w.bytes - ft_intlen((int)(list->stats).st_size));
-	ft_putstr(own->pw_name);
-	while (ospc-- != 0)
+	owner = getpwuid(uid);
+	group = getgrgid(gid);
+	owner_spaces = 2 + (width.owner - ft_strlen(owner->pw_name));
+	group_spaces = 2 + (width.group - ft_strlen(group->gr_name));
+	ft_putstr(owner->pw_name);
+	while (owner_spaces-- != 0)
 		ft_putchar(' ');
-	ft_putstr(grp->gr_name);
-	while (gspc-- != 0)
+	ft_putstr(group->gr_name);
+	while (group_spaces-- != 0)
 		ft_putchar(' ');
-	while (bspc-- != 0)
-		ft_putchar(' ');
-	ft_way_too_long(list, w);
 }
 
-void	ft_way_too_long(t_list *list, t_width w)
+void	ft_putblocks(t_list *list, t_width width)
 {
-	char			link[NAME_MAX];
+	int		block_spaces;
 
+	block_spaces = (width.bytes - ft_intlen((int)(list->stats).st_size));
 	if (S_ISBLK((list->stats).st_mode) || S_ISCHR((list->stats).st_mode))
-		ft_majmin((list->stats).st_rdev, w);
-	else
-		ft_putnbr((int)(list->stats).st_size);
-	ft_putchar(' ');
-	ft_puttime(&(list->stats).st_mtimespec.tv_sec);
-	ft_putstr(list->name);
-	if (S_ISLNK((list->stats).st_mode))
 	{
-		ft_putstr(" -> ");
-		readlink(list->path, link, NAME_MAX);
-		ft_putstr(link);
+		block_spaces = 0;
+		ft_majmin((list->stats).st_rdev, width);
+	}
+	else
+	{
+		while (block_spaces-- != 0)
+			ft_putchar(' ');
+		ft_putnbr((int)(list->stats).st_size);
+		ft_putchar(' ');
 	}
 }

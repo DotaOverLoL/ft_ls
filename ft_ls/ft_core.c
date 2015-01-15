@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_recursive.c                                     :+:      :+:    :+:   */
+/*   ft_core.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlebrize <tlebrize@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/12/13 17:19:13 by tlebrize          #+#    #+#             */
-/*   Updated: 2014/12/30 16:15:42 by tlebrize         ###   ########.fr       */
+/*   Created: 2015/01/12 15:21:07 by tlebrize          #+#    #+#             */
+/*   Updated: 2015/01/15 15:44:29 by tlebrize         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void		ft_display(t_list *list, t_args args)
 		ft_bubbles_time(list, args.r);
 	else
 		ft_bubbles_lexi(list, args.r);
+	if (args.f == 1)
+		ft_putpath(list->path);
 	if (args.l != 0)
 		ft_total(list, args);
-	if ((list->name[0] != '.' || args.a != 0) && args.f == 1)
-		ft_putpath(list->path);
 	while (list != NULL)
 	{
 		if ((list->name[0] != '.' || args.a != 0) && args.l != 0)
@@ -56,7 +56,6 @@ int			ft_base(char *dirpath, t_args args)
 {
 	DIR				*dirs;
 	struct dirent	*dire;
-	struct stat		stats;
 	t_list			*files;
 	t_list			*directories;
 	char			*path;
@@ -65,18 +64,21 @@ int			ft_base(char *dirpath, t_args args)
 	files = NULL;
 	directories = NULL;
 	if (dirs == NULL)
-		return (-1);
+	{
+		ft_EACESS(dirpath);
+		return (0);
+	}
 	while ((dire = readdir(dirs)) != NULL)
 	{
 		path = ft_path(dirpath, dire->d_name);
-		stat(path, &stats);
-		files = ft_addlink(files, dire->d_name, path, stats);
-		if (S_ISDIR(stats.st_mode) && ft_strcmp(dire->d_name, ".") != 0 &&
+		files = ft_addlink(files, dire->d_name, path);
+		if (dire->d_type == DT_DIR && ft_strcmp(dire->d_name, ".") != 0 &&
 				ft_strcmp(dire->d_name, "..") != 0 && args.R != 0)
-			directories = ft_addlink(directories, dire->d_name, path, stats);
+			directories = ft_addlink(directories, dire->d_name, path);
 	}
 	ft_display(files, args);
 	if (directories != NULL)
 		ft_recursive(directories, args);
+	closedir(dirs);
 	return (0);
 }

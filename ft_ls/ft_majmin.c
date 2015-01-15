@@ -6,7 +6,7 @@
 /*   By: tlebrize <tlebrize@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/30 16:30:27 by tlebrize          #+#    #+#             */
-/*   Updated: 2015/01/06 19:20:27 by tlebrize         ###   ########.fr       */
+/*   Updated: 2015/01/08 16:37:44 by tlebrize         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ void		ft_majmin(dev_t dev, t_width w)
 
 	if (w.major > w.minor)
 	{
-		aspc = 2 + (w.major - ft_intlen(major(dev)));
+		aspc = 1 + (w.major - ft_intlen(major(dev)));
 		ispc = 1 + (w.major - ft_intlen(minor(dev)));
 	}
 	else
 	{
-		aspc = 2 + (w.minor - ft_intlen(major(dev)));
+		aspc = 1 + (w.minor - ft_intlen(major(dev)));
 		ispc = 1 + (w.minor - ft_intlen(minor(dev)));
 	}
 	while (aspc-- != 0)
